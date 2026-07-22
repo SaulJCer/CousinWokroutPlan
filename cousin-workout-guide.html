@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cousin-workout-guide</title>
+  <style>
+    :root {
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
+      --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-5: 1.25rem;
+      --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem; --space-16: 4rem;
+      --radius-sm: 0.375rem; --radius-md: 0.75rem; --radius-lg: 1rem; --radius-xl: 1.5rem; --radius-full: 9999px;
+      --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      --shadow-sm: 0 1px 2px rgba(16,24,40,.06);
+      --shadow-md: 0 10px 30px rgba(16,24,40,.10);
+      --shadow-lg: 0 20px 50px rgba(16,24,40,.15);
+    }
+    :root, [data-theme="light"] {
+      --color-bg:#f7f6f2; --color-surface:#ffffff; --color-surface-2:#f3f6fb; --color-border:#d9dee8;
+      --color-text:#1f2937; --color-muted:#5f6b7a; --color-faint:#94a3b8; --color-primary:#0f766e; --color-primary-2:#14b8a6;
+      --color-accent:#f59e0b; --color-good:#3b82f6; --color-danger:#b45309;
+    }
+    [data-theme="dark"] {
+      --color-bg:#151718; --color-surface:#1d2125; --color-surface-2:#232830; --color-border:#363c45;
+      --color-text:#edf2f7; --color-muted:#b0bac7; --color-faint:#7c8798; --color-primary:#58b9b0; --color-primary-2:#8de5dc;
+      --color-accent:#f4b860; --color-good:#86b7ff; --color-danger:#f0b35b;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.25); --shadow-md: 0 10px 30px rgba(0,0,0,.35); --shadow-lg: 0 20px 50px rgba(0,0,0,.45);
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+    body { margin:0; font-family: Inter, ui-sans-serif, system-ui, sans-serif; background:var(--color-bg); color:var(--color-text); font-size:var(--text-base); line-height:1.55; }
+    img { display:block; max-width:100%; height:auto; }
+    a, button { transition: transform var(--transition), background var(--transition), color var(--transition), border-color var(--transition), box-shadow var(--transition); }
+    .skip-link { position:absolute; left:-9999px; top:auto; }
+    .skip-link:focus { left:var(--space-4); top:var(--space-4); background:var(--color-surface); padding:var(--space-3) var(--space-4); border-radius:var(--radius-sm); z-index:1000; }
+    .shell { max-width:1200px; margin:0 auto; padding:0 var(--space-4); }
+    header { position:sticky; top:0; z-index:30; backdrop-filter: blur(10px); background:color-mix(in srgb, var(--color-bg) 88%, transparent); border-bottom:1px solid var(--color-border); }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:var(--space-4); padding:var(--space-3) 0; }
+    .brand { display:flex; align-items:center; gap:var(--space-3); font-weight:800; letter-spacing:.01em; }
+    .logo { width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,var(--color-primary),var(--color-primary-2)); display:grid; place-items:center; box-shadow:var(--shadow-sm); }
+    .logo svg { width:26px; height:26px; color:white; }
+    .actions { display:flex; align-items:center; gap:var(--space-2); }
+    .icon-btn, .nav-btn, .next-btn, .chip { min-height:44px; min-width:44px; border:1px solid var(--color-border); background:var(--color-surface); color:var(--color-text); border-radius:var(--radius-full); padding:0 var(--space-4); box-shadow:var(--shadow-sm); }
+    .icon-btn:hover, .nav-btn:hover, .next-btn:hover, .chip:hover { transform:translateY(-1px); }
+    .hero { padding:clamp(var(--space-8), 8vw, var(--space-16)) 0 var(--space-8); display:grid; grid-template-columns: 1.2fr .8fr; gap:var(--space-8); align-items:center; }
+    .eyebrow { display:inline-flex; align-items:center; gap:var(--space-2); font-size:var(--text-sm); color:var(--color-primary); background:color-mix(in srgb, var(--color-primary) 10%, var(--color-surface)); border:1px solid color-mix(in srgb, var(--color-primary) 25%, var(--color-border)); padding:var(--space-2) var(--space-3); border-radius:var(--radius-full); }
+    h1 { font-size:var(--text-2xl); line-height:1.05; margin:var(--space-4) 0; }
+    .hero p { color:var(--color-muted); max-width:60ch; }
+    .hero-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-xl); padding:var(--space-6); box-shadow:var(--shadow-md); }
+    .hero-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-3); margin-top:var(--space-5); }
+    .hero-list div { background:var(--color-surface-2); border-radius:var(--radius-lg); padding:var(--space-4); border:1px solid var(--color-border); }
+    .section { padding:var(--space-8) 0; }
+    .section-head { display:flex; justify-content:space-between; align-items:end; gap:var(--space-4); margin-bottom:var(--space-5); }
+    .section-head h2 { font-size:var(--text-xl); margin:0; }
+    .section-head p { margin:0; color:var(--color-muted); }
+    .stop-rule { background:linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 18%, var(--color-surface)), var(--color-surface)); border:1px solid color-mix(in srgb, var(--color-accent) 35%, var(--color-border)); border-radius:var(--radius-xl); padding:var(--space-5); box-shadow:var(--shadow-sm); }
+    .days { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--space-4); }
+    .day-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-xl); padding:var(--space-5); box-shadow:var(--shadow-sm); }
+    .day-card h3 { margin-top:0; margin-bottom:var(--space-2); font-size:var(--text-lg); }
+    .small { font-size:var(--text-sm); color:var(--color-muted); }
+    .exercise-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:var(--space-5); }
+    .exercise-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-xl); overflow:hidden; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; scroll-margin-top:90px; }
+    .media-wrap { position:relative; aspect-ratio:4/3; background:linear-gradient(135deg, #d8efe9, #eef5ff); overflow:hidden; }
+    [data-theme="dark"] .media-wrap { background:linear-gradient(135deg, #21443f, #263141); }
+    .media-wrap img { width:100%; height:100%; object-fit:cover; transition:transform 260ms cubic-bezier(0.16,1,0.3,1); }
+    .media-wrap:focus-within img, .media-wrap:hover img { transform:scale(1.08); }
+    .zoom-btn { position:absolute; right:var(--space-3); bottom:var(--space-3); background:rgba(255,255,255,.9); color:#111827; border:none; border-radius:var(--radius-full); padding:var(--space-2) var(--space-3); min-height:44px; font-weight:700; box-shadow:var(--shadow-sm); }
+    .card-body { padding:var(--space-5); display:grid; gap:var(--space-3); }
+    .meta { display:flex; flex-wrap:wrap; gap:var(--space-2); }
+    .chip { display:inline-flex; align-items:center; justify-content:center; font-size:var(--text-sm); padding:0 var(--space-3); }
+    .cues { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--space-2); }
+    .cue { background:var(--color-surface-2); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:var(--space-3); text-align:center; font-weight:700; font-size:var(--text-sm); }
+    .adult { color:var(--color-danger); font-weight:800; }
+    .nav-row { display:flex; justify-content:flex-end; }
+    .next-btn { text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:var(--space-2); font-weight:800; }
+    .rules-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-4); }
+    .rule-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-xl); padding:var(--space-5); }
+    .lightbox { position:fixed; inset:0; background:rgba(15,23,42,.78); display:none; align-items:center; justify-content:center; padding:var(--space-4); z-index:100; }
+    .lightbox.open { display:flex; }
+    .lightbox-inner { max-width:min(96vw,1100px); max-height:92vh; width:100%; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-xl); overflow:hidden; box-shadow:var(--shadow-lg); }
+    .lightbox-top { display:flex; align-items:center; justify-content:space-between; padding:var(--space-3) var(--space-4); border-bottom:1px solid var(--color-border); }
+    .lightbox-figure { background:#0b1020; display:grid; place-items:center; min-height:50vh; }
+    .lightbox-figure img { width:100%; height:auto; max-height:78vh; object-fit:contain; }
+    footer { padding:var(--space-10) 0 var(--space-16); color:var(--color-muted); }
+    @media (max-width: 980px) {
+      .hero { grid-template-columns:1fr; }
+      .days { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .rules-grid { grid-template-columns:1fr; }
+    }
+    @media (max-width: 680px) {
+      .hero-list, .cues, .days { grid-template-columns:1fr; }
+      .section-head { align-items:start; flex-direction:column; }
+      .topbar { align-items:flex-start; }
+      .brand span { font-size:var(--text-sm); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior:auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header>
+    <div class="shell topbar">
+      <div class="brand" aria-label="Workout Guide">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8v8"/><path d="M17 8v8"/><path d="M4 10h3"/><path d="M17 10h3"/><path d="M2 14h5"/><path d="M17 14h5"/><path d="M7 12h10"/></svg>
+        </div>
+        <span>Basketball Strength Guide</span>
+      </div>
+      <div class="actions">
+        <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch color theme">☀️</button>
+        <a class="nav-btn" href="#workouts">Start</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="shell hero">
+      <div>
+        <div class="eyebrow">Simple • Positive • 20–30 Minutes</div>
+        <h1>Strong, simple workouts your cousin can follow on any device</h1>
+        <p>This guide uses short instructions, repeated patterns, bigger images, and one clear next step at a time so the workout feels easier to understand and less frustrating. Youth activity guidance recommends age-appropriate, enjoyable movement, and muscle-strengthening work at least 3 days each week. [web:13]</p>
+        <div class="hero-list">
+          <div><strong>4 days</strong><br><span class="small">Short weekly routine</span></div>
+          <div><strong>4–5 exercises</strong><br><span class="small">Same structure each day</span></div>
+          <div><strong>Big images</strong><br><span class="small">Tap to zoom full screen</span></div>
+          <div><strong>Safe focus</strong><br><span class="small">No max lifts or pain pushing</span></div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h2 style="margin-top:0;">How to use it</h2>
+        <ol style="padding-left:1.2rem; margin:0; display:grid; gap:var(--space-3);">
+          <li>Pick the day.</li>
+          <li>Look at one exercise card.</li>
+          <li>Read the 3 short cues.</li>
+          <li>Tap the image to make it bigger.</li>
+          <li>Use the “Next Exercise” button.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="shell section">
+      <div class="stop-rule">
+        <strong>Stop rule:</strong> stop if there is sharp pain, dizziness, or unusual discomfort. Youth strength training should focus on proper technique, light-to-moderate resistance, and supervision instead of maximal lifting. [web:92][web:4]
+      </div>
+    </section>
+
+    <section class="shell section" id="workouts">
+      <div class="section-head">
+        <div>
+          <h2>Workout days</h2>
+          <p>Repeat the same plan each week.</p>
+        </div>
+      </div>
+      <div class="days">
+        <article class="day-card"><h3>Day 1</h3><p class="small">Push + legs</p><p>Bench Sit-to-Stand, Dumbbell Bench Press, Leg Extension, Wall Push-Up, Front Plank on Bench.</p></article>
+        <article class="day-card"><h3>Day 2</h3><p class="small">Pull + simple movement</p><p>One-Arm Row, Glute Bridge, Farmer Carry, Calf Raise, Dead Bug.</p></article>
+        <article class="day-card"><h3>Day 3</h3><p class="small">Lower body + upper push</p><p>Goblet Box Squat, Incline Push-Up, Step-Up, Seated Shoulder Press, Side Plank from Knees.</p></article>
+        <article class="day-card"><h3>Day 4</h3><p class="small">Pull + basketball support</p><p>Chest-Supported Row, Reverse Lunge Hold, Leg Extension, Dumbbell Curl, Fast March in Place.</p></article>
+      </div>
+    </section>
+
+    <section class="shell section">
+      <div class="section-head"><div><h2>Workout rules</h2><p>Simple coaching, safe pacing, and adult help when needed.</p></div></div>
+      <div class="rules-grid">
+        <div class="rule-card"><strong>Safety</strong><p>Use light weights, smooth reps, and close adult help for bench, dumbbell, and balance exercises. Youth resistance training guidance supports supervised, age-appropriate training with technique first. [web:92][web:4]</p></div>
+        <div class="rule-card"><strong>Basketball support</strong><p>Basketball can count toward the daily 60 minutes of physical activity, and muscle-strengthening activity should be included at least 3 days per week. [web:13][web:20]</p></div>
+      </div>
+    </section>
+
+    <section class="shell section">
+      <div class="section-head"><div><h2>Exercise cards</h2><p>Tap any image to make it bigger.</p></div></div>
+      <div class="exercise-grid">
+
+        <article class="exercise-card" id="ex1">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=80" alt="Sit to stand from a bench" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Sit to stand from a bench">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 1 • Bench Sit-to-Stand</h3><div class="meta"><span class="chip">2–3 x 8–10</span><span class="chip">Rest 60 sec</span></div><div class="cues"><div class="cue">Feet flat</div><div class="cue">Chest tall</div><div class="cue">Sit slow</div></div><p><strong>Easy option:</strong> High bench sit-to-stand with hands on thighs.</p><p class="small">Photo idea: side view sitting to standing with feet flat.</p><div class="nav-row"><a class="next-btn" href="#ex2">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex2">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80" alt="Dumbbell bench press on a flat bench" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Dumbbell bench press on a flat bench">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 1 • Dumbbell Bench Press <span class="adult">Adult help</span></h3><div class="meta"><span class="chip">2–3 x 8–10</span><span class="chip">Rest 60–75 sec</span></div><div class="cues"><div class="cue">Feet down</div><div class="cue">Wrists straight</div><div class="cue">Press smooth</div></div><p><strong>Easy option:</strong> Push-up against bench.</p><p class="small">Photo idea: side view pressing dumbbells straight up.</p><div class="nav-row"><a class="next-btn" href="#ex3">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex3">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=1200&q=80" alt="Seated leg extension style exercise" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Seated leg extension style exercise">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 1 • Leg Extension</h3><div class="meta"><span class="chip">2 x 10–12</span><span class="chip">Rest 45–60 sec</span></div><div class="cues"><div class="cue">Back on pad</div><div class="cue">Lift controlled</div><div class="cue">Lower slow</div></div><p><strong>Easy option:</strong> Seated knee straightening without weight.</p><p class="small">Photo idea: seated tall, straightening knees.</p><div class="nav-row"><a class="next-btn" href="#ex4">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex4">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=1200&q=80" alt="Wall push-up position" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Wall push-up position">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 1 • Wall Push-Up</h3><div class="meta"><span class="chip">2 x 8–12</span><span class="chip">Rest 45 sec</span></div><div class="cues"><div class="cue">Hands on wall</div><div class="cue">Body straight</div><div class="cue">Push away</div></div><p><strong>Easy option:</strong> Standing wall lean hold.</p><p class="small">Photo idea: side view with straight body line.</p><div class="nav-row"><a class="next-btn" href="#ex5">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex5">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=80" alt="Forearm plank on elevated surface" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Forearm plank on elevated surface">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 1 • Front Plank on Bench</h3><div class="meta"><span class="chip">2 x 15–20 sec</span><span class="chip">Rest 45 sec</span></div><div class="cues"><div class="cue">Elbows on bench</div><div class="cue">Belly tight</div><div class="cue">Back flat</div></div><p><strong>Easy option:</strong> Hands-on-bench plank.</p><p class="small">Photo idea: side view, straight line body.</p><div class="nav-row"><a class="next-btn" href="#ex6">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex6">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1598971639058-a3b8c3e34e37?auto=format&fit=crop&w=1200&q=80" alt="One arm dumbbell row with bench support" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1598971639058-a3b8c3e34e37?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="One arm dumbbell row with bench support">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 2 • One-Arm Dumbbell Row <span class="adult">Adult help</span></h3><div class="meta"><span class="chip">2–3 x 8 each</span><span class="chip">Rest 60 sec</span></div><div class="cues"><div class="cue">Hand on bench</div><div class="cue">Pull to hip</div><div class="cue">Back flat</div></div><p><strong>Easy option:</strong> Chest-supported dumbbell row.</p><p class="small">Photo idea: side view, flat back on bench support.</p><div class="nav-row"><a class="next-btn" href="#ex7">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex7">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1200&q=80" alt="Glute bridge on floor" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Glute bridge on floor">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 2 • Glute Bridge</h3><div class="meta"><span class="chip">2–3 x 10</span><span class="chip">Rest 45–60 sec</span></div><div class="cues"><div class="cue">Feet near hips</div><div class="cue">Squeeze at top</div><div class="cue">Lower slow</div></div><p><strong>Easy option:</strong> Short bridge hold.</p><p class="small">Photo idea: side view, hips lifted straight.</p><div class="nav-row"><a class="next-btn" href="#ex8">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex8">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1517837016564-bfcf0ef7303d?auto=format&fit=crop&w=1200&q=80" alt="Farmer carry with dumbbells" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1517837016564-bfcf0ef7303d?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Farmer carry with dumbbells">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 2 • Farmer Carry <span class="adult">Adult help</span></h3><div class="meta"><span class="chip">3 walks 20–30 sec</span><span class="chip">Rest 45–60 sec</span></div><div class="cues"><div class="cue">Stand tall</div><div class="cue">Arms long</div><div class="cue">Walk proud</div></div><p><strong>Easy option:</strong> One dumbbell carry.</p><p class="small">Photo idea: short video walking tall with dumbbells.</p><div class="nav-row"><a class="next-btn" href="#ex9">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex9">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=1200&q=80" alt="Standing calf raise holding support" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Standing calf raise holding support">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 2 • Calf Raise</h3><div class="meta"><span class="chip">2 x 12</span><span class="chip">Rest 30–45 sec</span></div><div class="cues"><div class="cue">Stand tall</div><div class="cue">Up on toes</div><div class="cue">Down slow</div></div><p><strong>Easy option:</strong> Hold bench and raise.</p><p class="small">Photo idea: side view with heels lifted.</p><div class="nav-row"><a class="next-btn" href="#ex10">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex10">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1594737625785-c46e012cf86f?auto=format&fit=crop&w=1200&q=80" alt="Dead bug core exercise on floor" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1594737625785-c46e012cf86f?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Dead bug core exercise on floor">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 2 • Dead Bug</h3><div class="meta"><span class="chip">2 x 6 each</span><span class="chip">Rest 45 sec</span></div><div class="cues"><div class="cue">Back flat</div><div class="cue">Move slow</div><div class="cue">Reach opposite</div></div><p><strong>Easy option:</strong> Arms only dead bug.</p><p class="small">Photo idea: top or side view, slow opposite move.</p><div class="nav-row"><a class="next-btn" href="#ex11">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex11">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1434596922112-19c563067271?auto=format&fit=crop&w=1200&q=80" alt="Goblet squat to bench with dumbbell" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1434596922112-19c563067271?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Goblet squat to bench with dumbbell">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 3 • Goblet Box Squat</h3><div class="meta"><span class="chip">2–3 x 8</span><span class="chip">Rest 60 sec</span></div><div class="cues"><div class="cue">Weight close</div><div class="cue">Tap bench light</div><div class="cue">Stand tall</div></div><p><strong>Easy option:</strong> Bodyweight bench sit-to-stand.</p><p class="small">Photo idea: side view holding one dumbbell at chest.</p><div class="nav-row"><a class="next-btn" href="#ex12">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex12">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1200&q=80" alt="Incline push-up on bench" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Incline push-up on bench">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 3 • Incline Push-Up on Bench</h3><div class="meta"><span class="chip">2–3 x 8–10</span><span class="chip">Rest 45–60 sec</span></div><div class="cues"><div class="cue">Hands on bench</div><div class="cue">Body straight</div><div class="cue">Push away</div></div><p><strong>Easy option:</strong> Wall push-up.</p><p class="small">Photo idea: side view with straight line body.</p><div class="nav-row"><a class="next-btn" href="#ex13">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex13">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=1200&q=80" alt="Step up onto low bench or box" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Step up onto low bench or box">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 3 • Step-Up <span class="adult">Adult help at first</span></h3><div class="meta"><span class="chip">2 x 6 each</span><span class="chip">Rest 60 sec</span></div><div class="cues"><div class="cue">Foot all on</div><div class="cue">Stand tall</div><div class="cue">Step slow down</div></div><p><strong>Easy option:</strong> March in place.</p><p class="small">Photo idea: side view with full foot on bench.</p><div class="nav-row"><a class="next-btn" href="#ex14">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex14">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1598268033198-47c73fef91d1?auto=format&fit=crop&w=1200&q=80" alt="Seated dumbbell shoulder press" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1598268033198-47c73fef91d1?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Seated dumbbell shoulder press">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 3 • Seated Dumbbell Shoulder Press <span class="adult">Adult help</span></h3><div class="meta"><span class="chip">2 x 8</span><span class="chip">Rest 60 sec</span></div><div class="cues"><div class="cue">Sit tall</div><div class="cue">Press straight</div><div class="cue">Lower slow</div></div><p><strong>Easy option:</strong> One light front raise.</p><p class="small">Photo idea: front view seated tall pressing overhead.</p><div class="nav-row"><a class="next-btn" href="#ex15">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex15">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1518611012118-fb8f2f7c2f8f?auto=format&fit=crop&w=1200&q=80" alt="Side plank from knees" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1518611012118-fb8f2f7c2f8f?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Side plank from knees">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 3 • Side Plank from Knees</h3><div class="meta"><span class="chip">2 x 10–15 sec</span><span class="chip">Rest 30–45 sec</span></div><div class="cues"><div class="cue">Elbow under shoulder</div><div class="cue">Hips up</div><div class="cue">Stay long</div></div><p><strong>Easy option:</strong> Side-lying hold.</p><p class="small">Photo idea: side view with bent knees and hips lifted.</p><div class="nav-row"><a class="next-btn" href="#ex16">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex16">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=1200&q=80" alt="Chest supported dumbbell row" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Chest supported dumbbell row">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 4 • Chest-Supported Row <span class="adult">Adult help</span></h3><div class="meta"><span class="chip">2–3 x 8–10</span><span class="chip">Rest 60 sec</span></div><div class="cues"><div class="cue">Chest on bench</div><div class="cue">Elbows back</div><div class="cue">Lower slow</div></div><p><strong>Easy option:</strong> One-arm row lighter.</p><p class="small">Photo idea: side or front angle with chest supported.</p><div class="nav-row"><a class="next-btn" href="#ex17">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex17">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=80" alt="Split stance hold with support" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Split stance hold with support">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 4 • Reverse Lunge Hold</h3><div class="meta"><span class="chip">2 x 15 sec each</span><span class="chip">Rest 45 sec</span></div><div class="cues"><div class="cue">Hold bench light</div><div class="cue">Front foot flat</div><div class="cue">Stay tall</div></div><p><strong>Easy option:</strong> Split-stance hold.</p><p class="small">Photo idea: side view shallow split stance holding bench.</p><div class="nav-row"><a class="next-btn" href="#ex18">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex18">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=1200&q=80" alt="Leg extension repetition" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Leg extension repetition">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 4 • Leg Extension</h3><div class="meta"><span class="chip">2 x 10–12</span><span class="chip">Rest 45–60 sec</span></div><div class="cues"><div class="cue">Sit tall</div><div class="cue">Lift smooth</div><div class="cue">Lower slow</div></div><p><strong>Easy option:</strong> Seated knee straightening.</p><p class="small">Photo idea: same machine view each week for consistency.</p><div class="nav-row"><a class="next-btn" href="#ex19">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex19">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=1200&q=80" alt="Dumbbell curl standing" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Dumbbell curl standing">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 4 • Dumbbell Curl</h3><div class="meta"><span class="chip">2 x 10</span><span class="chip">Rest 45 sec</span></div><div class="cues"><div class="cue">Elbows by sides</div><div class="cue">Lift smooth</div><div class="cue">Lower slow</div></div><p><strong>Easy option:</strong> One dumbbell curl.</p><p class="small">Photo idea: front view with elbows close to body.</p><div class="nav-row"><a class="next-btn" href="#ex20">Next Exercise</a></div></div>
+        </article>
+
+        <article class="exercise-card" id="ex20">
+          <div class="media-wrap"><img src="https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf?auto=format&fit=crop&w=1200&q=80" alt="Marching in place cardio movement" width="1200" height="900" loading="lazy"><button class="zoom-btn" data-zoom-src="https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf?auto=format&fit=crop&w=1600&q=85" data-zoom-alt="Marching in place cardio movement">Make image bigger</button></div>
+          <div class="card-body"><h3>Day 4 • Fast March in Place</h3><div class="meta"><span class="chip">3 x 20 sec</span><span class="chip">Rest 40 sec</span></div><div class="cues"><div class="cue">Knees up little</div><div class="cue">Pump arms</div><div class="cue">Land soft</div></div><p><strong>Easy option:</strong> Slow march in place.</p><p class="small">Photo idea: short video with easy rhythm and soft feet.</p><div class="nav-row"><a class="next-btn" href="#top">Next Exercise</a></div></div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell">
+    This workout page is built to be responsive on phones, tablets, and desktops, and the larger tap-to-zoom images are there to support easier visual learning. Children and teens should get at least 60 minutes of physical activity daily and include muscle-strengthening activity at least 3 days per week. [web:13][web:20]
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Large exercise image">
+    <div class="lightbox-inner">
+      <div class="lightbox-top">
+        <strong id="lightboxTitle">Exercise image</strong>
+        <button class="icon-btn" id="closeLightbox" type="button" aria-label="Close image">Close</button>
+      </div>
+      <div class="lightbox-figure"><img id="lightboxImg" src="" alt=""></div>
+    </div>
+  </div>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.querySelector('[data-theme-toggle]');
+    let currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    root.setAttribute('data-theme', currentTheme);
+    const updateToggle = () => { toggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️'; };
+    updateToggle();
+    toggle.addEventListener('click', () => { currentTheme = currentTheme === 'dark' ? 'light' : 'dark'; root.setAttribute('data-theme', currentTheme); updateToggle(); });
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxTitle = document.getElementById('lightboxTitle');
+    document.querySelectorAll('.zoom-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        lightboxImg.src = btn.dataset.zoomSrc;
+        lightboxImg.alt = btn.dataset.zoomAlt;
+        lightboxTitle.textContent = btn.dataset.zoomAlt;
+        lightbox.classList.add('open');
+        lightbox.setAttribute('aria-hidden', 'false');
+      });
+    });
+    function closeLightbox(){ lightbox.classList.remove('open'); lightbox.setAttribute('aria-hidden', 'true'); lightboxImg.src=''; }
+    document.getElementById('closeLightbox').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+  </script>
+</body>
+</html>
